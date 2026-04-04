@@ -28,7 +28,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.hero.description': 'Promoting peace, security, and rule of law for Addis Ababa City Administration',
     'home.hero.cta1': 'Our Services',
     'home.hero.cta2': 'Contact Us',
-    'home.welcome.title': 'Welcome to Lemi Kura Peace and Security Office',
+    'home.welcome.title': 'Welcome to Lemi Kura Subcity Peace and Security Administration Office',
     'home.welcome.description': 'We are dedicated to maintaining peace, strengthening social cohesion, and coordinating security-related community structures in Addis Ababa. Our mission is to promote sustainable peace through community participation and national unity.',
     'home.services.title': 'Our Key Services',
     'home.services.viewall': 'View All Services',
@@ -39,7 +39,7 @@ const translations: Record<Language, Record<string, string>> = {
     // About Page
     'about.title': 'About Us',
     'about.overview.title': 'Overview',
-    'about.overview.content': 'The Lemi Kura Peace and Security Office is a governmental institution under the Lemi Kura Sub-City Administration of Addis Ababa, established to promote peace, security, and the rule of law throughout the sub-city.',
+    'about.overview.content': 'The Lemi Kura Subcity Peace and Security Administration Office is a governmental institution under the Lemi Kura Sub-City Administration of Addis Ababa, established to promote peace, security, and the rule of law throughout the sub-city.',
     'about.mission.title': 'Our Mission',
     'about.mission.content': 'To maintain sustainable peace and security through community participation, strengthen social cohesion, coordinate religious institutions and social organizations, and build institutional capacity for structured governance.',
     'about.vision.title': 'Our Vision',
@@ -129,11 +129,11 @@ const translations: Record<Language, Record<string, string>> = {
     'contact.form.submit': 'Send Message',
     
     // Footer
-    'footer.description': 'Lemi Kura Peace and Security Office, Lemi Kura Sub-City Administration, Addis Ababa',
+    'footer.description': 'Lemi Kura Subcity Peace and Security Administration Office, Lemi Kura Sub-City Administration, Addis Ababa',
     'footer.quicklinks': 'Quick Links',
     'footer.contact': 'Contact Information',
     'footer.followus': 'Follow Us',
-    'footer.copyright': '© 2026 Lemi Kura Peace and Security Office. All rights reserved.',
+    'footer.copyright': '© 2026 Lemi Kura Subcity Peace and Security Administration Office. All rights reserved.',
   },
   am: {
     // Header (Amharic)
@@ -152,7 +152,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.hero.description': 'ለአዲስ አበባ ከተማ አስተዳደር ሰላም፣ ደህንነትና የህግ የበላይነትን ማስፈን',
     'home.hero.cta1': 'አገልግሎቶቻችን',
     'home.hero.cta2': 'አግኙን',
-    'home.welcome.title': 'ወደ ለሚ ኩራ ሰላምና ደህንነት ጽ/ቤት እንኳን በደህና መጡ',
+    'home.welcome.title': 'ወደ ለሚ ኩራ ክፍለ ከተማ ሰላምና ጸጥታ አስተዳደር ጽ/ቤት እንኳን በደህና መጡ',
     'home.welcome.description': 'በአዲስ አበባ ሰላምን ለመጠበቅ፣ ማህበረሰባዊ ትስስርን ለማጠናከር እና ከደህንነት ጋር የተያያዙ የማህበረሰብ መዋቅሮችን ለማስተባበር ቁርጠኞች ነን። ተልእኮአችን በማህበረሰብ ተሳትፎና በብሄራዊ አንድነት ዘላቂ ሰላም ማስፋፋት ነው።',
     'home.services.title': 'ዋና አገልግሎቶቻችን',
     'home.services.viewall': 'ሁሉንም አገልግሎቶች ይመልከቱ',
@@ -163,7 +163,7 @@ const translations: Record<Language, Record<string, string>> = {
     // About (Amharic)
     'about.title': 'ስለ እኛ',
     'about.overview.title': 'አጠቃላይ እይታ',
-    'about.overview.content': 'የለሚ ኩራ ሰላምና ደህንነት ጽ/ቤት በለሚ ኩራ ክፍለ ከተማ አስተዳደር የሚመራ የመንግስት ተቋም ሲሆን በክፍለ ከተማው ውስጥ ሰላምን፣ ደህንነትንና የህግ የበላይነትን ለማስፈን የተቋቋመ ነው።',
+    'about.overview.content': 'የለሚ ኩራ ክፍለ ከተማ ሰላምና ጸጥታ አስተዳደር ጽ/ቤት በለሚ ኩራ ክፍለ ከተማ አስተዳደር የሚመራ የመንግስት ተቋም ሲሆን በክፍለ ከተማው ውስጥ ሰላምን፣ ጸጥታንና የህግ የበላይነትን ለማስፈን የተቋቋመ ነው።',
     'about.mission.title': 'ተልእኮአችን',
     'about.mission.content': 'በማህበረሰብ ተሳትፎ ዘላቂ ሰላምና ደህንነት መጠበቅ፣ ማህበረሰባዊ ትስስር ማጠናከር፣ ሃይማኖታዊ ተቋማትንና ማህበራዊ ድርጅቶችን ማስተባበር እና ለተዋቀረ አስተዳደር የተቋም አቅም መገንባት።',
     'about.vision.title': 'ራእያችን',
@@ -253,11 +253,11 @@ const translations: Record<Language, Record<string, string>> = {
     'contact.form.submit': 'መልዕክት ላክ',
     
     // Footer (Amharic)
-    'footer.description': 'የለሚ ኩራ ሰላምና ደህንነት ጽ/ቤት፣ ለሚ ኩራ ክፍለ ከተማ አስተዳደር፣ አዲስ አበባ',
+    'footer.description': 'ለሚ ኩራ ክፍለ ከተማ ሰላምና ጸጥታ አስተዳደር ጽ/ቤት፣ ለሚ ኩራ ክፍለ ከተማ አስተዳደር፣ አዲስ አበባ',
     'footer.quicklinks': 'ፈጣን አገናኞች',
     'footer.contact': 'የእውቂያ መረጃ',
     'footer.followus': 'ይከተሉን',
-    'footer.copyright': '© 2026 የለሚ ኩራ ሰላምና ደህንነት ጽ/ቤት። ሁሉም መብቶች የተጠበቁ ናቸው።',
+    'footer.copyright': '© 2026 ለሚ ኩራ ክፍለ ከተማ ሰላምና ጸጥታ አስተዳደር ጽ/ቤት። ሁሉም መብቶች የተጠበቁ ናቸው።',
   }
 };
 

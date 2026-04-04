@@ -31,7 +31,7 @@ export function AdminLogin() {
             <Shield className="w-10 h-10" />
           </div>
           <h1 className="text-2xl font-bold">Admin Portal</h1>
-          <p className="text-sm opacity-80 mt-1">Lemi Kura Peace and Security Office</p>
+          <p className="text-sm opacity-80 mt-1">Lemi Kura Subcity Peace and Security Administration Office</p>
         </div>
 
         {/* Form */}

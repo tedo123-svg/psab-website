@@ -14,7 +14,7 @@ export function Contact() {
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '', subject: '', message: '' });
 
   const contactInfo = [
-    { icon: MapPin, title: t('contact.location'), content: { en: 'Lemi Kura Peace and Security Office\nLemi Kura Sub-City, Addis Ababa\nEthiopia', am: 'የለሚ ኩራ ሰላምና ደህንነት ጽ/ቤት\nለሚ ኩራ ክፍለ ከተማ፣ አዲስ አበባ\nኢትዮጵያ' }, color: 'green' },
+    { icon: MapPin, title: t('contact.location'), content: { en: 'Lemi Kura Subcity Peace and Security Administration Office\nLemi Kura Sub-City, Addis Ababa\nEthiopia', am: 'ለሚ ኩራ ክፍለ ከተማ ሰላምና ጸጥታ አስተዳደር ጽ/ቤት\nለሚ ኩራ ክፍለ ከተማ፣ አዲስ አበባ\nኢትዮጵያ' }, color: 'green' },
     { icon: Phone, title: t('contact.phone'), content: { en: 'Main Office: +251-11-557-5000\nEmergency: +251-11-557-5001\nFax: +251-11-557-5002', am: 'ዋና ቢሮ፡ +251-11-557-5000\nድንገተኛ፡ +251-11-557-5001\nፋክስ፡ +251-11-557-5002' }, color: 'blue' },
     { icon: Mail, title: t('contact.email'), content: { en: 'General: info@psab.gov.et\nSupport: support@psab.gov.et\nMedia: media@psab.gov.et', am: 'አጠቃላይ፡ info@psab.gov.et\nድጋፍ፡ support@psab.gov.et\nሚዲያ፡ media@psab.gov.et' }, color: 'yellow' },
     { icon: Clock, title: t('contact.hours'), content: { en: t('contact.hours.weekday') + '\n' + t('contact.hours.weekend'), am: t('contact.hours.weekday') + '\n' + t('contact.hours.weekend') }, color: 'green' },

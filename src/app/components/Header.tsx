@@ -53,8 +53,8 @@ export function Header() {
             <div>
               <h1 className="font-bold text-lg md:text-xl text-gray-800 leading-tight">
                 {language === 'en' 
-                  ? 'Lemi Kura Peace and Security Office'
-                  : 'ለሚ ኩራ ሰላምና ደህንነት ጽ/ቤት'
+                  ? 'Lemi Kura Subcity Peace and Security Administration Office'
+                  : 'ለሚ ኩራ ክፍለ ከተማ ሰላምና ጸጥታ አስተዳደር ጽ/ቤት'
                 }
               </h1>
               <p className="text-sm text-gray-600">

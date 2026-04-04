@@ -33,7 +33,7 @@ export function AdminLayout() {
             <Shield className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-bold text-sm leading-tight">Lemi Kura PSO</p>
+            <p className="font-bold text-sm leading-tight">Lemi Kura PSAO</p>
             <p className="text-xs text-gray-400">Admin Portal</p>
           </div>
         </div>

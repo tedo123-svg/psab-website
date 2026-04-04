@@ -170,9 +170,14 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         supabase.from('news').select('*').order('created_at', { ascending: false }),
         supabase.from('projects').select('*').order('created_at', { ascending: true }),
         supabase.from('resources').select('*').order('created_at', { ascending: true }),
-        supabase.from('services').select('*').order('order', { ascending: true }),
+        supabase.from('services').select('*').order('"order"', { ascending: true }),
         supabase.from('messages').select('*').order('created_at', { ascending: false }),
       ]);
+      if (n.error) console.error('news:', n.error.message);
+      if (p.error) console.error('projects:', p.error.message);
+      if (r.error) console.error('resources:', r.error.message);
+      if (s.error) console.error('services:', s.error.message);
+      if (m.error) console.error('messages:', m.error.message);
       if (n.data) setNews(n.data.map(mapNews));
       if (p.data) setProjects(p.data.map(mapProject));
       if (r.data) setResources(r.data.map(mapResource));

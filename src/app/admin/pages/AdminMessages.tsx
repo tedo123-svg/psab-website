@@ -15,14 +15,14 @@ export function AdminMessages() {
     return true;
   }).slice().reverse();
 
-  const openMessage = (msg: Message) => {
+  const openMessage = async (msg: Message) => {
     setSelected(msg);
-    if (!msg.read) markMessageRead(msg.id);
+    if (!msg.read) await markMessageRead(msg.id);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     if (!confirm('Delete this message?')) return;
-    deleteMessage(id);
+    await deleteMessage(id);
     if (selected?.id === id) setSelected(null);
     toast.success('Message deleted');
   };

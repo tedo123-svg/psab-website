@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { supabase } from '../../lib/supabase';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -9,7 +10,7 @@ export interface NewsItem {
   date: string;
   category: { en: string; am: string };
   image: string;
-  imageUrl?: string;   // base64 or URL of uploaded image
+  imageUrl?: string;
   published: boolean;
 }
 
@@ -42,39 +43,51 @@ export interface Message {
   read: boolean;
 }
 
-// ── Seed data ──────────────────────────────────────────────────────────────────
+// ── Row mappers ────────────────────────────────────────────────────────────────
 
-const seedNews: NewsItem[] = [
-  { id: 1, title: { en: 'Community Peace Building Workshop Successfully Completed', am: 'የማህበረሰብ ሰላም ግንባታ አውደ ጥናት በተሳካ ሁኔታ ተጠናቀቀ' }, excerpt: { en: 'Over 200 community leaders participated in a comprehensive peace-building workshop.', am: 'ከ200 በላይ የማህበረሰብ መሪዎች ተሳትፈዋል።' }, date: 'March 28, 2026', category: { en: 'Training', am: 'ስልጠና' }, image: 'training', published: true },
-  { id: 2, title: { en: 'New Religious Institution Registration Guidelines Released', am: 'አዳዲስ የሃይማኖት ተቋም ምዝገባ መመሪያዎች ተለቀቁ' }, excerpt: { en: 'Updated guidelines streamline the registration process for religious institutions.', am: 'የተሻሻሉ መመሪያዎች የምዝገባ ሂደቱን ያመቻቻሉ።' }, date: 'March 25, 2026', category: { en: 'Announcement', am: 'ማስታወቂያ' }, image: 'announcement', published: true },
-  { id: 3, title: { en: 'Peace Council Meeting Addresses Community Concerns', am: 'የሰላም ምክር ቤት ስብሰባ የማህበረሰብ ጉዳዮችን ተመለከተ' }, excerpt: { en: 'Quarterly peace council meeting brought together stakeholders.', am: 'ሩብ ዓመታዊ ስብሰባ ባለድርሻዎችን አሰባስቧል።' }, date: 'March 20, 2026', category: { en: 'Event', am: 'ክስተት' }, image: 'event', published: true },
-  { id: 4, title: { en: 'Peace Army Recruitment Drive Begins', am: 'የሰላም ሰራዊት ምልመላ ዘመቻ ጀመረ' }, excerpt: { en: 'New recruitment campaign for peace army volunteers.', am: 'ለሰላም ሰራዊት አዲስ ዘመቻ ተጀመረ።' }, date: 'March 15, 2026', category: { en: 'Campaign', am: 'ዘመቻ' }, image: 'campaign', published: true },
-  { id: 5, title: { en: 'Inter-Faith Dialogue Promotes Unity', am: 'የሃይማኖቶች ውይይት አንድነትን ያበረታታል' }, excerpt: { en: 'Leaders from various religious communities came together for dialogue.', am: 'ከተለያዩ ሃይማኖቶች መሪዎች ተሰብስበዋል።' }, date: 'March 10, 2026', category: { en: 'Event', am: 'ክስተት' }, image: 'dialogue', published: true },
-  { id: 6, title: { en: 'Community Security Assessment Report Published', am: 'የደህንነት ግምገማ ሪፖርት ታትሟል' }, excerpt: { en: 'Annual security assessment highlights achievements.', am: 'ዓመታዊ ግምገማ ስኬቶችን አጉልቷል።' }, date: 'March 5, 2026', category: { en: 'Announcement', am: 'ማስታወቂያ' }, image: 'report', published: true },
-  { id: 7, title: { en: 'Youth Peace Leadership Graduation Ceremony', am: 'የወጣቶች ሰላም አመራር ምረቃ' }, excerpt: { en: '150 young peace leaders graduated from the inaugural program.', am: '150 ወጣቶች ተመርቀዋል።' }, date: 'February 28, 2026', category: { en: 'Training', am: 'ስልጠና' }, image: 'training', published: true },
-  { id: 8, title: { en: 'New Sub-City Peace Offices Inaugurated', am: 'አዳዲስ ቢሮዎች ተከፈቱ' }, excerpt: { en: 'Three new sub-city peace offices were inaugurated.', am: 'ሶስት አዳዲስ ቢሮዎች ተከፈቱ።' }, date: 'February 20, 2026', category: { en: 'Announcement', am: 'ማስታወቂያ' }, image: 'announcement', published: false },
-];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapNews = (r: any): NewsItem => ({
+  id: r.id,
+  title: { en: r.title_en, am: r.title_am },
+  excerpt: { en: r.excerpt_en, am: r.excerpt_am },
+  date: r.date,
+  category: { en: r.category_en, am: r.category_am },
+  image: r.image,
+  imageUrl: r.image_url ?? undefined,
+  published: r.published,
+});
 
-const seedProjects: Project[] = [
-  { id: 1, title: { en: 'Community Peace Ambassador Program', am: 'የማህበረሰብ ሰላም አምባሳደር ፕሮግራም' }, description: { en: 'Training and deploying peace ambassadors across all sub-cities.', am: 'በሁሉም ክፍለ ከተሞች አምባሳደሮችን ማሰልጠን።' }, status: 'ongoing', progress: 75, color: 'green' },
-  { id: 2, title: { en: 'Religious Harmony Initiative', am: 'የሃይማኖት ስምምነት ተነሳሽነት' }, description: { en: 'Fostering interfaith dialogue and cooperation.', am: 'የሃይማኖቶች ትብብር ማበረታታት።' }, status: 'ongoing', progress: 60, color: 'blue' },
-  { id: 3, title: { en: 'Early Warning System Enhancement', am: 'ቀድመው ማስጠንቀቂያ ስርዓት' }, description: { en: 'Developing advanced early warning systems.', am: 'ቀድሞ ማስጠንቀቂያ ስርዓቶችን ማዘጋጀት።' }, status: 'ongoing', progress: 45, color: 'yellow' },
-  { id: 4, title: { en: 'Peace Value Education Campaign', am: 'የሰላም እሴት ትምህርት ዘመቻ' }, description: { en: 'Comprehensive education campaign promoting peace values.', am: 'የሰላም እሴቶችን የሚያስፋፋ ዘመቻ።' }, status: 'ongoing', progress: 85, color: 'green' },
-  { id: 5, title: { en: 'Community Security Network', am: 'የማህበረሰብ ደህንነት አውታረ' }, description: { en: 'Establishing neighborhood watch programs.', am: 'የጎረቤት ክትትል ፕሮግራሞች ማቋቋም።' }, status: 'ongoing', progress: 55, color: 'blue' },
-  { id: 6, title: { en: 'Youth Peace Leadership Program', am: 'የወጣቶች ሰላም አመራር ፕሮግራም' }, description: { en: 'Empowering youth as peace leaders.', am: 'ወጣቶችን እንደ ሰላም መሪዎች ማብቃት።' }, status: 'completed', progress: 100, color: 'yellow' },
-];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapProject = (r: any): Project => ({
+  id: r.id,
+  title: { en: r.title_en, am: r.title_am },
+  description: { en: r.description_en, am: r.description_am },
+  status: r.status,
+  progress: r.progress,
+  color: r.color,
+});
 
-const seedResources: Resource[] = [
-  { id: 1, title: { en: 'Proclamation No. 64/2011 - Establishment of PSAB', am: 'አዋጅ ቁጥር 64/2011' }, type: { en: 'Legal Document', am: 'ህጋዊ ሰነድ' }, category: 'policy', size: '2.4 MB', published: true },
-  { id: 2, title: { en: 'Proclamation No. 84/2016 - Amendment', am: 'አዋጅ ቁጥር 84/2016' }, type: { en: 'Legal Document', am: 'ህጋዊ ሰነድ' }, category: 'policy', size: '1.8 MB', published: true },
-  { id: 3, title: { en: 'Religious Institution Registration Guidelines', am: 'የምዝገባ መመሪያዎች' }, type: { en: 'Guidelines', am: 'መመሪያዎች' }, category: 'guidelines', size: '3.2 MB', published: true },
-  { id: 4, title: { en: 'Peace Council Implementation Manual', am: 'የሰላም ምክር ቤት መመሪያ' }, type: { en: 'Manual', am: 'መመሪያ' }, category: 'guidelines', size: '4.1 MB', published: true },
-  { id: 5, title: { en: 'Community Peace Building Best Practices', am: 'ምርጥ ተሞክሮዎች' }, type: { en: 'Research', am: 'ምርምር' }, category: 'research', size: '5.6 MB', published: true },
-  { id: 6, title: { en: 'Annual Security Assessment Report 2025', am: 'ዓመታዊ ሪፖርት 2025' }, type: { en: 'Report', am: 'ሪፖርት' }, category: 'reports', size: '6.8 MB', published: true },
-  { id: 7, title: { en: 'Peace Value Training Curriculum', am: 'ስርዓተ ትምህርት' }, type: { en: 'Curriculum', am: 'ስርዓተ ትምህርት' }, category: 'training', size: '3.5 MB', published: false },
-  { id: 8, title: { en: 'Early Warning System Guidelines', am: 'ቀድሞ ማስጠንቀቂያ መመሪያ' }, type: { en: 'Guidelines', am: 'መመሪያዎች' }, category: 'guidelines', size: '2.9 MB', published: true },
-  { id: 9, title: { en: 'Conflict Resolution Framework', am: 'የግጭት አፈታት ማዕቀፍ' }, type: { en: 'Framework', am: 'ማዕቀፍ' }, category: 'policy', size: '2.1 MB', published: true },
-];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapResource = (r: any): Resource => ({
+  id: r.id,
+  title: { en: r.title_en, am: r.title_am },
+  type: { en: r.type_en, am: r.type_am },
+  category: r.category,
+  size: r.size,
+  published: r.published,
+});
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapMessage = (r: any): Message => ({
+  id: r.id,
+  source: r.source,
+  name: r.name,
+  email: r.email,
+  subject: r.subject,
+  message: r.message,
+  date: new Date(r.created_at).toLocaleDateString(),
+  read: r.read,
+});
 
 // ── Context ────────────────────────────────────────────────────────────────────
 
@@ -82,17 +95,27 @@ interface AdminContextType {
   isAuthenticated: boolean;
   login: (username: string, password: string) => boolean;
   logout: () => void;
-  // Data
+  loading: boolean;
+  // News
   news: NewsItem[];
-  setNews: (items: NewsItem[]) => void;
+  addNews: (item: Omit<NewsItem, 'id'>) => Promise<void>;
+  updateNews: (item: NewsItem) => Promise<void>;
+  deleteNews: (id: number) => Promise<void>;
+  // Projects
   projects: Project[];
-  setProjects: (items: Project[]) => void;
+  addProject: (item: Omit<Project, 'id'>) => Promise<void>;
+  updateProject: (item: Project) => Promise<void>;
+  deleteProject: (id: number) => Promise<void>;
+  // Resources
   resources: Resource[];
-  setResources: (items: Resource[]) => void;
+  addResource: (item: Omit<Resource, 'id'>) => Promise<void>;
+  updateResource: (item: Resource) => Promise<void>;
+  deleteResource: (id: number) => Promise<void>;
+  // Messages
   messages: Message[];
-  addMessage: (msg: Omit<Message, 'id' | 'date' | 'read'>) => void;
-  markMessageRead: (id: number) => void;
-  deleteMessage: (id: number) => void;
+  addMessage: (msg: Omit<Message, 'id' | 'date' | 'read'>) => Promise<void>;
+  markMessageRead: (id: number) => Promise<void>;
+  deleteMessage: (id: number) => Promise<void>;
   unreadCount: number;
 }
 
@@ -102,10 +125,30 @@ const CREDENTIALS = { username: 'admin', password: 'admin123' };
 
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [news, setNews] = useState<NewsItem[]>(seedNews);
-  const [projects, setProjects] = useState<Project[]>(seedProjects);
-  const [resources, setResources] = useState<Resource[]>(seedResources);
+  const [loading, setLoading] = useState(true);
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [resources, setResources] = useState<Resource[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
+
+  // ── Load all data on mount ──
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      const [n, p, r, m] = await Promise.all([
+        supabase.from('news').select('*').order('created_at', { ascending: false }),
+        supabase.from('projects').select('*').order('created_at', { ascending: true }),
+        supabase.from('resources').select('*').order('created_at', { ascending: true }),
+        supabase.from('messages').select('*').order('created_at', { ascending: false }),
+      ]);
+      if (n.data) setNews(n.data.map(mapNews));
+      if (p.data) setProjects(p.data.map(mapProject));
+      if (r.data) setResources(r.data.map(mapResource));
+      if (m.data) setMessages(m.data.map(mapMessage));
+      setLoading(false);
+    }
+    load();
+  }, []);
 
   const login = (username: string, password: string) => {
     if (username === CREDENTIALS.username && password === CREDENTIALS.password) {
@@ -114,30 +157,109 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     }
     return false;
   };
-
   const logout = () => setIsAuthenticated(false);
 
-  const addMessage = (msg: Omit<Message, 'id' | 'date' | 'read'>) => {
-    setMessages((prev) => [
-      ...prev,
-      { ...msg, id: Date.now(), date: new Date().toLocaleDateString(), read: false },
-    ]);
+  // ── News CRUD ──
+  const addNews = async (item: Omit<NewsItem, 'id'>) => {
+    const { data, error } = await supabase.from('news').insert({
+      title_en: item.title.en, title_am: item.title.am,
+      excerpt_en: item.excerpt.en, excerpt_am: item.excerpt.am,
+      date: item.date, category_en: item.category.en, category_am: item.category.am,
+      image: item.image, image_url: item.imageUrl ?? null, published: item.published,
+    }).select().single();
+    if (!error && data) setNews((prev) => [mapNews(data), ...prev]);
   };
 
-  const markMessageRead = (id: number) =>
-    setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, read: true } : m)));
+  const updateNews = async (item: NewsItem) => {
+    const { error } = await supabase.from('news').update({
+      title_en: item.title.en, title_am: item.title.am,
+      excerpt_en: item.excerpt.en, excerpt_am: item.excerpt.am,
+      date: item.date, category_en: item.category.en, category_am: item.category.am,
+      image: item.image, image_url: item.imageUrl ?? null, published: item.published,
+    }).eq('id', item.id);
+    if (!error) setNews((prev) => prev.map((n) => (n.id === item.id ? item : n)));
+  };
 
-  const deleteMessage = (id: number) =>
-    setMessages((prev) => prev.filter((m) => m.id !== id));
+  const deleteNews = async (id: number) => {
+    const { error } = await supabase.from('news').delete().eq('id', id);
+    if (!error) setNews((prev) => prev.filter((n) => n.id !== id));
+  };
+
+  // ── Projects CRUD ──
+  const addProject = async (item: Omit<Project, 'id'>) => {
+    const { data, error } = await supabase.from('projects').insert({
+      title_en: item.title.en, title_am: item.title.am,
+      description_en: item.description.en, description_am: item.description.am,
+      status: item.status, progress: item.progress, color: item.color,
+    }).select().single();
+    if (!error && data) setProjects((prev) => [...prev, mapProject(data)]);
+  };
+
+  const updateProject = async (item: Project) => {
+    const { error } = await supabase.from('projects').update({
+      title_en: item.title.en, title_am: item.title.am,
+      description_en: item.description.en, description_am: item.description.am,
+      status: item.status, progress: item.progress, color: item.color,
+    }).eq('id', item.id);
+    if (!error) setProjects((prev) => prev.map((p) => (p.id === item.id ? item : p)));
+  };
+
+  const deleteProject = async (id: number) => {
+    const { error } = await supabase.from('projects').delete().eq('id', id);
+    if (!error) setProjects((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  // ── Resources CRUD ──
+  const addResource = async (item: Omit<Resource, 'id'>) => {
+    const { data, error } = await supabase.from('resources').insert({
+      title_en: item.title.en, title_am: item.title.am,
+      type_en: item.type.en, type_am: item.type.am,
+      category: item.category, size: item.size, published: item.published,
+    }).select().single();
+    if (!error && data) setResources((prev) => [...prev, mapResource(data)]);
+  };
+
+  const updateResource = async (item: Resource) => {
+    const { error } = await supabase.from('resources').update({
+      title_en: item.title.en, title_am: item.title.am,
+      type_en: item.type.en, type_am: item.type.am,
+      category: item.category, size: item.size, published: item.published,
+    }).eq('id', item.id);
+    if (!error) setResources((prev) => prev.map((r) => (r.id === item.id ? item : r)));
+  };
+
+  const deleteResource = async (id: number) => {
+    const { error } = await supabase.from('resources').delete().eq('id', id);
+    if (!error) setResources((prev) => prev.filter((r) => r.id !== id));
+  };
+
+  // ── Messages ──
+  const addMessage = async (msg: Omit<Message, 'id' | 'date' | 'read'>) => {
+    const { data, error } = await supabase.from('messages').insert({
+      source: msg.source, name: msg.name, email: msg.email,
+      subject: msg.subject, message: msg.message,
+    }).select().single();
+    if (!error && data) setMessages((prev) => [mapMessage(data), ...prev]);
+  };
+
+  const markMessageRead = async (id: number) => {
+    const { error } = await supabase.from('messages').update({ read: true }).eq('id', id);
+    if (!error) setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, read: true } : m)));
+  };
+
+  const deleteMessage = async (id: number) => {
+    const { error } = await supabase.from('messages').delete().eq('id', id);
+    if (!error) setMessages((prev) => prev.filter((m) => m.id !== id));
+  };
 
   const unreadCount = messages.filter((m) => !m.read).length;
 
   return (
     <AdminContext.Provider value={{
-      isAuthenticated, login, logout,
-      news, setNews,
-      projects, setProjects,
-      resources, setResources,
+      isAuthenticated, login, logout, loading,
+      news, addNews, updateNews, deleteNews,
+      projects, addProject, updateProject, deleteProject,
+      resources, addResource, updateResource, deleteResource,
       messages, addMessage, markMessageRead, deleteMessage, unreadCount,
     }}>
       {children}

@@ -14,7 +14,7 @@ const EMPTY: Omit<Resource, 'id'> = {
 };
 
 export function AdminResources() {
-  const { resources, setResources } = useAdmin();
+  const { resources, addResource, updateResource, deleteResource } = useAdmin();
   const [editing, setEditing] = useState<Resource | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [form, setForm] = useState<Omit<Resource, 'id'>>(EMPTY);
@@ -23,27 +23,27 @@ export function AdminResources() {
   const openEdit = (r: Resource) => { setForm({ ...r }); setEditing(r); setIsNew(false); };
   const closeModal = () => { setEditing(null); setIsNew(false); };
 
-  const handleSave = (e: FormEvent) => {
+  const handleSave = async (e: FormEvent) => {
     e.preventDefault();
     if (!form.title.en.trim()) { toast.error('English title is required'); return; }
     if (isNew) {
-      setResources([...resources, { ...form, id: Date.now() }]);
+      await addResource(form);
       toast.success('Resource created');
     } else if (editing) {
-      setResources(resources.map((r) => (r.id === editing.id ? { ...form, id: editing.id } : r)));
+      await updateResource({ ...form, id: editing.id });
       toast.success('Resource updated');
     }
     closeModal();
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     if (!confirm('Delete this resource?')) return;
-    setResources(resources.filter((r) => r.id !== id));
+    await deleteResource(id);
     toast.success('Resource deleted');
   };
 
-  const togglePublish = (id: number) => {
-    setResources(resources.map((r) => (r.id === id ? { ...r, published: !r.published } : r)));
+  const togglePublish = async (r: Resource) => {
+    await updateResource({ ...r, published: !r.published });
   };
 
   const showModal = isNew || editing !== null;
@@ -90,7 +90,7 @@ export function AdminResources() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => togglePublish(r.id)} className="p-1.5 rounded hover:bg-gray-100 text-gray-500" title={r.published ? 'Unpublish' : 'Publish'}>
+                      <button onClick={() => togglePublish(r)} className="p-1.5 rounded hover:bg-gray-100 text-gray-500" title={r.published ? 'Unpublish' : 'Publish'}>
                         {r.published ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                       <button onClick={() => openEdit(r)} className="p-1.5 rounded hover:bg-blue-50 text-blue-600"><Pencil className="w-4 h-4" /></button>

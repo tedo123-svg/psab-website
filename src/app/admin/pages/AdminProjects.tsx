@@ -12,7 +12,7 @@ const EMPTY: Omit<Project, 'id'> = {
 };
 
 export function AdminProjects() {
-  const { projects, setProjects } = useAdmin();
+  const { projects, addProject, updateProject, deleteProject } = useAdmin();
   const [editing, setEditing] = useState<Project | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [form, setForm] = useState<Omit<Project, 'id'>>(EMPTY);
@@ -21,22 +21,22 @@ export function AdminProjects() {
   const openEdit = (p: Project) => { setForm({ ...p }); setEditing(p); setIsNew(false); };
   const closeModal = () => { setEditing(null); setIsNew(false); };
 
-  const handleSave = (e: FormEvent) => {
+  const handleSave = async (e: FormEvent) => {
     e.preventDefault();
     if (!form.title.en.trim()) { toast.error('English title is required'); return; }
     if (isNew) {
-      setProjects([...projects, { ...form, id: Date.now() }]);
+      await addProject(form);
       toast.success('Project created');
     } else if (editing) {
-      setProjects(projects.map((p) => (p.id === editing.id ? { ...form, id: editing.id } : p)));
+      await updateProject({ ...form, id: editing.id });
       toast.success('Project updated');
     }
     closeModal();
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     if (!confirm('Delete this project?')) return;
-    setProjects(projects.filter((p) => p.id !== id));
+    await deleteProject(id);
     toast.success('Project deleted');
   };
 

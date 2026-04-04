@@ -14,7 +14,7 @@ const EMPTY: Omit<NewsItem, 'id'> = {
 };
 
 export function AdminNews() {
-  const { news, setNews } = useAdmin();
+  const { news, addNews, updateNews, deleteNews } = useAdmin();
   const [editing, setEditing] = useState<NewsItem | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [form, setForm] = useState<Omit<NewsItem, 'id'>>(EMPTY);
@@ -41,27 +41,27 @@ export function AdminNews() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleSave = (e: FormEvent) => {
+  const handleSave = async (e: FormEvent) => {
     e.preventDefault();
     if (!form.title.en.trim()) { toast.error('English title is required'); return; }
     if (isNew) {
-      setNews([...news, { ...form, id: Date.now() }]);
+      await addNews(form);
       toast.success('News article created');
     } else if (editing) {
-      setNews(news.map((n) => (n.id === editing.id ? { ...form, id: editing.id } : n)));
+      await updateNews({ ...form, id: editing.id });
       toast.success('News article updated');
     }
     closeModal();
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     if (!confirm('Delete this article?')) return;
-    setNews(news.filter((n) => n.id !== id));
+    await deleteNews(id);
     toast.success('Article deleted');
   };
 
-  const togglePublish = (id: number) => {
-    setNews(news.map((n) => (n.id === id ? { ...n, published: !n.published } : n)));
+  const togglePublish = async (item: NewsItem) => {
+    await updateNews({ ...item, published: !item.published });
   };
 
   const showModal = isNew || editing !== null;
@@ -117,7 +117,7 @@ export function AdminNews() {
                   </td>
                   <td className="px-4 py-4">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => togglePublish(item.id)} className="p-1.5 rounded hover:bg-gray-100 text-gray-500" title={item.published ? 'Unpublish' : 'Publish'}>
+                      <button onClick={() => togglePublish(item)} className="p-1.5 rounded hover:bg-gray-100 text-gray-500" title={item.published ? 'Unpublish' : 'Publish'}>
                         {item.published ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                       <button onClick={() => openEdit(item)} className="p-1.5 rounded hover:bg-blue-50 text-blue-600">

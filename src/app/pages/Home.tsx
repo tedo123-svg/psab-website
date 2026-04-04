@@ -1,34 +1,16 @@
 import { Link } from 'react-router';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAdmin } from '../contexts/AdminContext';
-import { 
-  Shield, 
-  Users, 
-  Scale, 
-  Heart, 
-  ArrowRight,
-  BookOpen,
-  Building2,
-  MessageSquare,
-  Award,
-  GraduationCap
-} from 'lucide-react';
+import { ArrowRight, BookOpen, Award, ImageOff, Shield, Scale, Users, Heart } from 'lucide-react';
 
 export function Home() {
   const { language, t } = useLanguage();
-  const { news: allNews } = useAdmin();
-
-  const keyServices = [
-    { icon: GraduationCap, key: '1', color: 'bg-green-500' },
-    { icon: Users, key: '2', color: 'bg-blue-500' },
-    { icon: Heart, key: '3', color: 'bg-yellow-500' },
-    { icon: Building2, key: '4', color: 'bg-green-600' },
-    { icon: Shield, key: '8', color: 'bg-blue-600' },
-    { icon: MessageSquare, key: '7', color: 'bg-yellow-600' },
-  ];
+  const { news: allNews, services: allServices } = useAdmin();
 
   // Show the 3 most recent published news items
   const newsItems = allNews.filter((n) => n.published).slice(0, 3);
+  // Show first 6 published services
+  const keyServices = allServices.filter((s) => s.published).slice(0, 6);
 
   return (
     <div>
@@ -129,25 +111,30 @@ export function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {keyServices.map((service, index) => {
-              const Icon = service.icon;
+            {keyServices.map((service) => {
+              const lang = language === 'en' ? 'en' : 'am';
+              const colorMap: Record<string, string> = { green: 'bg-green-500', blue: 'bg-blue-500', yellow: 'bg-yellow-500' };
               return (
-                <div
-                  key={index}
-                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow border border-gray-100"
-                >
-                  <div className={`w-14 h-14 ${service.color} rounded-lg flex items-center justify-center mb-4`}>
-                    <Icon className="w-7 h-7 text-white" />
+                <div key={service.id} className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow border border-gray-100 overflow-hidden">
+                  {service.imageUrl ? (
+                    <img src={service.imageUrl} alt={service.title[lang]} className="w-full h-36 object-cover" />
+                  ) : (
+                    <div className={`w-full h-36 ${colorMap[service.color]} flex items-center justify-center`}>
+                      <ImageOff className="w-8 h-8 text-white/40" />
+                    </div>
+                  )}
+                  <div className="p-5">
+                    <h3 className="font-bold text-lg text-gray-800 mb-2">{service.title[lang]}</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">{service.description[lang]}</p>
                   </div>
-                  <h3 className="font-bold text-lg text-gray-800 mb-2">
-                    {t(`services.${service.key}.title`)}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {t(`services.${service.key}.description`)}
-                  </p>
                 </div>
               );
             })}
+            {keyServices.length === 0 && (
+              <div className="col-span-3 text-center py-8 text-gray-400 text-sm">
+                {language === 'en' ? 'Services coming soon.' : 'አገልግሎቶች በቅርቡ ይመጣሉ።'}
+              </div>
+            )}
           </div>
 
           <div className="text-center mt-10">

@@ -29,12 +29,24 @@ export function Resources() {
     reports: FileText, training: BookOpen,
   };
 
-  const handleDownload = (title: string) => {
-    toast.info(language === 'en' ? `Preparing download: ${title}` : `ማውረድ በዝግጅት ላይ: ${title}`);
+  const handleDownload = (resource: { title: { en: string }; fileUrl?: string }) => {
+    if (resource.fileUrl) {
+      const a = document.createElement('a');
+      a.href = resource.fileUrl;
+      a.download = resource.title.en;
+      a.target = '_blank';
+      a.click();
+    } else {
+      toast.info(language === 'en' ? 'No file available for download.' : 'ለማውረድ ፋይል የለም።');
+    }
   };
 
-  const handleView = (title: string) => {
-    toast.info(language === 'en' ? `Opening: ${title}` : `በመክፈት ላይ: ${title}`);
+  const handleView = (resource: { title: { en: string }; fileUrl?: string }) => {
+    if (resource.fileUrl) {
+      window.open(resource.fileUrl, '_blank');
+    } else {
+      toast.info(language === 'en' ? 'No file available to view.' : 'ለማየት ፋይል የለም።');
+    }
   };
 
   return (
@@ -107,14 +119,14 @@ export function Resources() {
                       </h3>
                       <div className="flex gap-2">
                         <button
-                          onClick={() => handleDownload(resource.title.en)}
+                          onClick={() => handleDownload(resource)}
                           className="flex-1 bg-green-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-green-700 transition-colors text-sm flex items-center justify-center gap-2"
                         >
                           <Download className="w-4 h-4" />
                           {t('resources.download')}
                         </button>
                         <button
-                          onClick={() => handleView(resource.title.en)}
+                          onClick={() => handleView(resource)}
                           className="flex-1 border border-green-600 text-green-600 px-4 py-2 rounded-md font-semibold hover:bg-green-50 transition-colors text-sm flex items-center justify-center gap-2"
                         >
                           <Eye className="w-4 h-4" />

@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 const EMPTY: Omit<NewsItem, 'id'> = {
   title: { en: '', am: '' },
   excerpt: { en: '', am: '' },
+  body: { en: '', am: '' },
   date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
   category: { en: 'Announcement', am: 'ማስታወቂያ' },
   image: 'announcement',
@@ -27,10 +28,7 @@ export function AdminNews() {
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image must be under 5 MB');
-      return;
-    }
+    if (file.size > 5 * 1024 * 1024) { toast.error('Image must be under 5 MB'); return; }
     const reader = new FileReader();
     reader.onload = () => setForm((prev) => ({ ...prev, imageUrl: reader.result as string }));
     reader.readAsDataURL(file);
@@ -78,7 +76,6 @@ export function AdminNews() {
         </button>
       </div>
 
-      {/* Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -120,12 +117,8 @@ export function AdminNews() {
                       <button onClick={() => togglePublish(item)} className="p-1.5 rounded hover:bg-gray-100 text-gray-500" title={item.published ? 'Unpublish' : 'Publish'}>
                         {item.published ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
-                      <button onClick={() => openEdit(item)} className="p-1.5 rounded hover:bg-blue-50 text-blue-600">
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button onClick={() => handleDelete(item.id)} className="p-1.5 rounded hover:bg-red-50 text-red-500">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <button onClick={() => openEdit(item)} className="p-1.5 rounded hover:bg-blue-50 text-blue-600"><Pencil className="w-4 h-4" /></button>
+                      <button onClick={() => handleDelete(item.id)} className="p-1.5 rounded hover:bg-red-50 text-red-500"><Trash2 className="w-4 h-4" /></button>
                     </div>
                   </td>
                 </tr>
@@ -135,63 +128,37 @@ export function AdminNews() {
         </div>
       </div>
 
-      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={closeModal}>
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <h2 className="text-lg font-bold text-gray-800">{isNew ? 'Add News Article' : 'Edit Article'}</h2>
               <button onClick={closeModal} className="p-2 hover:bg-gray-100 rounded-lg"><X className="w-5 h-5" /></button>
             </div>
-
             <form onSubmit={handleSave} className="p-6 space-y-5">
 
-              {/* ── Image Upload ── */}
+              {/* Cover Image */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Cover Image</label>
                 {form.imageUrl ? (
                   <div className="relative rounded-xl overflow-hidden border border-gray-200 group">
                     <img src={form.imageUrl} alt="Cover preview" className="w-full h-48 object-cover" />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100">
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="bg-white text-gray-800 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 shadow"
-                      >
-                        <Upload className="w-3 h-3" /> Replace
-                      </button>
-                      <button
-                        type="button"
-                        onClick={removeImage}
-                        className="bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 shadow"
-                      >
-                        <X className="w-3 h-3" /> Remove
-                      </button>
+                      <button type="button" onClick={() => fileInputRef.current?.click()} className="bg-white text-gray-800 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 shadow"><Upload className="w-3 h-3" /> Replace</button>
+                      <button type="button" onClick={removeImage} className="bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 shadow"><X className="w-3 h-3" /> Remove</button>
                     </div>
                   </div>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="w-full h-40 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-green-400 hover:bg-green-50 transition-colors group"
-                  >
-                    <div className="w-10 h-10 bg-gray-100 group-hover:bg-green-100 rounded-full flex items-center justify-center transition-colors">
-                      <Upload className="w-5 h-5 text-gray-400 group-hover:text-green-600" />
-                    </div>
-                    <span className="text-sm font-medium text-gray-500 group-hover:text-green-600">Click to upload image</span>
+                  <button type="button" onClick={() => fileInputRef.current?.click()} className="w-full h-36 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-green-400 hover:bg-green-50 transition-colors group">
+                    <Upload className="w-6 h-6 text-gray-400 group-hover:text-green-600" />
+                    <span className="text-sm font-medium text-gray-500 group-hover:text-green-600">Click to upload cover image</span>
                     <span className="text-xs text-gray-400">PNG, JPG, WEBP · max 5 MB</span>
                   </button>
                 )}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageChange}
-                />
+                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
               </div>
 
-              {/* ── Titles ── */}
+              {/* Titles */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">Title (English) *</label>
@@ -203,19 +170,31 @@ export function AdminNews() {
                 </div>
               </div>
 
-              {/* ── Excerpts ── */}
+              {/* Excerpts */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">Excerpt (English)</label>
-                  <textarea rows={3} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" value={form.excerpt.en} onChange={(e) => setForm({ ...form, excerpt: { ...form.excerpt, en: e.target.value } })} />
+                  <textarea rows={2} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" value={form.excerpt.en} onChange={(e) => setForm({ ...form, excerpt: { ...form.excerpt, en: e.target.value } })} />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">Excerpt (Amharic)</label>
-                  <textarea rows={3} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" value={form.excerpt.am} onChange={(e) => setForm({ ...form, excerpt: { ...form.excerpt, am: e.target.value } })} />
+                  <textarea rows={2} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" value={form.excerpt.am} onChange={(e) => setForm({ ...form, excerpt: { ...form.excerpt, am: e.target.value } })} />
                 </div>
               </div>
 
-              {/* ── Meta ── */}
+              {/* Full Body */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Full Article (English)</label>
+                  <textarea rows={6} placeholder="Write the full article content here..." className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" value={form.body.en} onChange={(e) => setForm({ ...form, body: { ...form.body, en: e.target.value } })} />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Full Article (Amharic)</label>
+                  <textarea rows={6} placeholder="ሙሉ ጽሑፉን እዚህ ይጻፉ..." className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" value={form.body.am} onChange={(e) => setForm({ ...form, body: { ...form.body, am: e.target.value } })} />
+                </div>
+              </div>
+
+              {/* Meta */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">Category</label>

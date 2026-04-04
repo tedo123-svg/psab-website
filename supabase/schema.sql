@@ -5,6 +5,8 @@ create table if not exists news (
   title_am   text not null default '',
   excerpt_en text not null default '',
   excerpt_am text not null default '',
+  body_en    text not null default '',
+  body_am    text not null default '',
   date       text not null,
   category_en text not null default 'Announcement',
   category_am text not null default 'ማስታወቂያ',
@@ -36,6 +38,7 @@ create table if not exists resources (
   type_am    text not null default 'ሰነድ',
   category   text not null default 'policy',
   size       text not null default '1.0 MB',
+  file_url   text,
   published  boolean not null default true,
   created_at timestamptz not null default now()
 );

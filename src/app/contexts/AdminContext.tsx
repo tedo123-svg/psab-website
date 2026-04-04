@@ -7,6 +7,7 @@ export interface NewsItem {
   id: number;
   title: { en: string; am: string };
   excerpt: { en: string; am: string };
+  body: { en: string; am: string };   // full article content
   date: string;
   category: { en: string; am: string };
   image: string;
@@ -29,6 +30,7 @@ export interface Resource {
   type: { en: string; am: string };
   category: string;
   size: string;
+  fileUrl?: string;   // URL of uploaded file in Supabase Storage
   published: boolean;
 }
 
@@ -50,6 +52,7 @@ const mapNews = (r: any): NewsItem => ({
   id: r.id,
   title: { en: r.title_en, am: r.title_am },
   excerpt: { en: r.excerpt_en, am: r.excerpt_am },
+  body: { en: r.body_en ?? '', am: r.body_am ?? '' },
   date: r.date,
   category: { en: r.category_en, am: r.category_am },
   image: r.image,
@@ -74,6 +77,7 @@ const mapResource = (r: any): Resource => ({
   type: { en: r.type_en, am: r.type_am },
   category: r.category,
   size: r.size,
+  fileUrl: r.file_url ?? undefined,
   published: r.published,
 });
 
@@ -164,6 +168,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     const { data, error } = await supabase.from('news').insert({
       title_en: item.title.en, title_am: item.title.am,
       excerpt_en: item.excerpt.en, excerpt_am: item.excerpt.am,
+      body_en: item.body.en, body_am: item.body.am,
       date: item.date, category_en: item.category.en, category_am: item.category.am,
       image: item.image, image_url: item.imageUrl ?? null, published: item.published,
     }).select().single();
@@ -174,6 +179,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.from('news').update({
       title_en: item.title.en, title_am: item.title.am,
       excerpt_en: item.excerpt.en, excerpt_am: item.excerpt.am,
+      body_en: item.body.en, body_am: item.body.am,
       date: item.date, category_en: item.category.en, category_am: item.category.am,
       image: item.image, image_url: item.imageUrl ?? null, published: item.published,
     }).eq('id', item.id);
@@ -214,7 +220,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     const { data, error } = await supabase.from('resources').insert({
       title_en: item.title.en, title_am: item.title.am,
       type_en: item.type.en, type_am: item.type.am,
-      category: item.category, size: item.size, published: item.published,
+      category: item.category, size: item.size,
+      file_url: item.fileUrl ?? null, published: item.published,
     }).select().single();
     if (!error && data) setResources((prev) => [...prev, mapResource(data)]);
   };
@@ -223,7 +230,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.from('resources').update({
       title_en: item.title.en, title_am: item.title.am,
       type_en: item.type.en, type_am: item.type.am,
-      category: item.category, size: item.size, published: item.published,
+      category: item.category, size: item.size,
+      file_url: item.fileUrl ?? null, published: item.published,
     }).eq('id', item.id);
     if (!error) setResources((prev) => prev.map((r) => (r.id === item.id ? item : r)));
   };

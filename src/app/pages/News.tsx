@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { useAdmin } from '../contexts/AdminContext';
-import { Calendar, Tag, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useAdmin, NewsItem } from '../contexts/AdminContext';
+import { Calendar, Tag, ArrowRight, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -10,8 +10,8 @@ export function News() {
   const { news: allNews } = useAdmin();
   const [activeCategory, setActiveCategory] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selected, setSelected] = useState<NewsItem | null>(null);
 
-  // Only show published items
   const newsItems = allNews.filter((n) => n.published);
 
   const categories = [
@@ -39,6 +39,8 @@ export function News() {
     setCurrentPage(1);
   };
 
+  const lang = language === 'en' ? 'en' : 'am';
+
   return (
     <div>
       {/* Hero */}
@@ -53,20 +55,17 @@ export function News() {
       <section className="bg-white border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-wrap gap-3 justify-center">
-            {categories.map((category) => {
-              const isActive = activeCategory === category.en;
-              return (
-                <button
-                  key={category.en}
-                  onClick={() => handleCategoryChange(category.en)}
-                  className={`px-6 py-2 rounded-full font-semibold transition-colors ${
-                    isActive ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {language === 'en' ? category.en : category.am}
-                </button>
-              );
-            })}
+            {categories.map((category) => (
+              <button
+                key={category.en}
+                onClick={() => handleCategoryChange(category.en)}
+                className={`px-6 py-2 rounded-full font-semibold transition-colors ${
+                  activeCategory === category.en ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {language === 'en' ? category.en : category.am}
+              </button>
+            ))}
           </div>
         </div>
       </section>
@@ -80,93 +79,98 @@ export function News() {
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-              {paginated.map((news) => {
-                const lang = language === 'en' ? 'en' : 'am';
-                return (
-                  <article
-                    key={news.id}
-                    className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group"
-                  >
-                    <div className="h-48 relative overflow-hidden">
-                      {news.imageUrl ? (
-                        <img
-                          src={news.imageUrl}
-                          alt={news.title[lang]}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-green-500 via-blue-500 to-yellow-500 flex items-center justify-center">
-                          <div className="text-white text-6xl opacity-30">
-                            {imageEmoji[news.image] ?? '📰'}
-                          </div>
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
-                    </div>
-                    <div className="p-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-                          <Tag className="w-3 h-3" />
-                          {news.category[lang]}
-                        </span>
-                        <span className="text-xs text-gray-500 flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          {news.date}
-                        </span>
+              {paginated.map((news) => (
+                <article
+                  key={news.id}
+                  className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group"
+                >
+                  <div className="h-48 relative overflow-hidden">
+                    {news.imageUrl ? (
+                      <img src={news.imageUrl} alt={news.title[lang]} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-green-500 via-blue-500 to-yellow-500 flex items-center justify-center">
+                        <div className="text-white text-6xl opacity-30">{imageEmoji[news.image] ?? '📰'}</div>
                       </div>
-                      <h3 className="font-bold text-xl text-gray-800 mb-3 leading-tight group-hover:text-green-600 transition-colors">
-                        {news.title[lang]}
-                      </h3>
-                      <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                        {news.excerpt[lang]}
-                      </p>
-                      <button className="text-green-600 hover:text-green-700 font-semibold text-sm inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-                        {t('home.news.readmore')}
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
+                    )}
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+                        <Tag className="w-3 h-3" />{news.category[lang]}
+                      </span>
+                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />{news.date}
+                      </span>
                     </div>
-                  </article>
-                );
-              })}
+                    <h3 className="font-bold text-xl text-gray-800 mb-3 leading-tight group-hover:text-green-600 transition-colors">
+                      {news.title[lang]}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed mb-4">{news.excerpt[lang]}</p>
+                    <button
+                      onClick={() => setSelected(news)}
+                      className="text-green-600 hover:text-green-700 font-semibold text-sm inline-flex items-center gap-1 group-hover:gap-2 transition-all"
+                    >
+                      {t('home.news.readmore')}
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </article>
+              ))}
             </div>
           )}
 
           {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex justify-center items-center gap-2 mt-12">
-              <button
-                onClick={() => setCurrentPage((p: number) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="p-2 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
-                aria-label="Previous page"
-              >
+              <button onClick={() => setCurrentPage((p: number) => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed" aria-label="Previous page">
                 <ChevronLeft className="w-5 h-5" />
               </button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`w-10 h-10 rounded-md font-semibold transition-colors ${
-                    currentPage === page
-                      ? 'bg-green-600 text-white'
-                      : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'
-                  }`}
-                >
+                <button key={page} onClick={() => setCurrentPage(page)} className={`w-10 h-10 rounded-md font-semibold transition-colors ${currentPage === page ? 'bg-green-600 text-white' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'}`}>
                   {page}
                 </button>
               ))}
-              <button
-                onClick={() => setCurrentPage((p: number) => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="p-2 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
-                aria-label="Next page"
-              >
+              <button onClick={() => setCurrentPage((p: number) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed" aria-label="Next page">
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
           )}
         </div>
       </section>
+
+      {/* Article Modal */}
+      {selected && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setSelected(null)}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            {/* Cover */}
+            {selected.imageUrl ? (
+              <img src={selected.imageUrl} alt={selected.title[lang]} className="w-full h-56 object-cover rounded-t-2xl" />
+            ) : (
+              <div className="w-full h-40 bg-gradient-to-br from-green-500 via-blue-500 to-yellow-500 rounded-t-2xl flex items-center justify-center">
+                <div className="text-white text-7xl opacity-30">{imageEmoji[selected.image] ?? '📰'}</div>
+              </div>
+            )}
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">{selected.category[lang]}</span>
+                  <span className="text-xs text-gray-500 flex items-center gap-1"><Calendar className="w-3 h-3" />{selected.date}</span>
+                </div>
+                <button onClick={() => setSelected(null)} className="p-2 hover:bg-gray-100 rounded-lg text-gray-500">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4 leading-tight">{selected.title[lang]}</h2>
+              {selected.body[lang] ? (
+                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{selected.body[lang]}</p>
+              ) : (
+                <p className="text-gray-600 leading-relaxed">{selected.excerpt[lang]}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -34,6 +34,16 @@ export interface Resource {
   published: boolean;
 }
 
+export interface Service {
+  id: number;
+  title: { en: string; am: string };
+  description: { en: string; am: string };
+  imageUrl?: string;
+  color: 'green' | 'blue' | 'yellow';
+  published: boolean;
+  order: number;
+}
+
 export interface Message {
   id: number;
   source: 'contact' | 'community';
@@ -82,6 +92,17 @@ const mapResource = (r: any): Resource => ({
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapService = (r: any): Service => ({
+  id: r.id,
+  title: { en: r.title_en, am: r.title_am },
+  description: { en: r.description_en, am: r.description_am },
+  imageUrl: r.image_url ?? undefined,
+  color: r.color ?? 'green',
+  published: r.published,
+  order: r.order ?? 0,
+});
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapMessage = (r: any): Message => ({
   id: r.id,
   source: r.source,
@@ -115,6 +136,11 @@ interface AdminContextType {
   addResource: (item: Omit<Resource, 'id'>) => Promise<void>;
   updateResource: (item: Resource) => Promise<void>;
   deleteResource: (id: number) => Promise<void>;
+  // Services
+  services: Service[];
+  addService: (item: Omit<Service, 'id'>) => Promise<void>;
+  updateService: (item: Service) => Promise<void>;
+  deleteService: (id: number) => Promise<void>;
   // Messages
   messages: Message[];
   addMessage: (msg: Omit<Message, 'id' | 'date' | 'read'>) => Promise<void>;
@@ -133,21 +159,24 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
 
   // ── Load all data on mount ──
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const [n, p, r, m] = await Promise.all([
+      const [n, p, r, s, m] = await Promise.all([
         supabase.from('news').select('*').order('created_at', { ascending: false }),
         supabase.from('projects').select('*').order('created_at', { ascending: true }),
         supabase.from('resources').select('*').order('created_at', { ascending: true }),
+        supabase.from('services').select('*').order('order', { ascending: true }),
         supabase.from('messages').select('*').order('created_at', { ascending: false }),
       ]);
       if (n.data) setNews(n.data.map(mapNews));
       if (p.data) setProjects(p.data.map(mapProject));
       if (r.data) setResources(r.data.map(mapResource));
+      if (s.data) setServices(s.data.map(mapService));
       if (m.data) setMessages(m.data.map(mapMessage));
       setLoading(false);
     }
@@ -241,6 +270,32 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     if (!error) setResources((prev) => prev.filter((r) => r.id !== id));
   };
 
+  // ── Services CRUD ──
+  const addService = async (item: Omit<Service, 'id'>) => {
+    const { data, error } = await supabase.from('services').insert({
+      title_en: item.title.en, title_am: item.title.am,
+      description_en: item.description.en, description_am: item.description.am,
+      image_url: item.imageUrl ?? null, color: item.color,
+      published: item.published, order: item.order,
+    }).select().single();
+    if (!error && data) setServices((prev) => [...prev, mapService(data)].sort((a, b) => a.order - b.order));
+  };
+
+  const updateService = async (item: Service) => {
+    const { error } = await supabase.from('services').update({
+      title_en: item.title.en, title_am: item.title.am,
+      description_en: item.description.en, description_am: item.description.am,
+      image_url: item.imageUrl ?? null, color: item.color,
+      published: item.published, order: item.order,
+    }).eq('id', item.id);
+    if (!error) setServices((prev) => prev.map((s) => (s.id === item.id ? item : s)));
+  };
+
+  const deleteService = async (id: number) => {
+    const { error } = await supabase.from('services').delete().eq('id', id);
+    if (!error) setServices((prev) => prev.filter((s) => s.id !== id));
+  };
+
   // ── Messages ──
   const addMessage = async (msg: Omit<Message, 'id' | 'date' | 'read'>) => {
     const { data, error } = await supabase.from('messages').insert({
@@ -268,6 +323,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       news, addNews, updateNews, deleteNews,
       projects, addProject, updateProject, deleteProject,
       resources, addResource, updateResource, deleteResource,
+      services, addService, updateService, deleteService,
       messages, addMessage, markMessageRead, deleteMessage, unreadCount,
     }}>
       {children}

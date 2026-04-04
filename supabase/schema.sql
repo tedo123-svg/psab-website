@@ -43,6 +43,20 @@ create table if not exists resources (
   created_at timestamptz not null default now()
 );
 
+-- ── Services ──────────────────────────────────────────────────────────────────
+create table if not exists services (
+  id             bigint generated always as identity primary key,
+  title_en       text not null,
+  title_am       text not null default '',
+  description_en text not null default '',
+  description_am text not null default '',
+  image_url      text,
+  color          text not null default 'green' check (color in ('green','blue','yellow')),
+  published      boolean not null default true,
+  "order"        integer not null default 0,
+  created_at     timestamptz not null default now()
+);
+
 -- ── Messages ──────────────────────────────────────────────────────────────────
 create table if not exists messages (
   id         bigint generated always as identity primary key,
@@ -59,6 +73,7 @@ create table if not exists messages (
 alter table news      enable row level security;
 alter table projects  enable row level security;
 alter table resources enable row level security;
+alter table services  enable row level security;
 alter table messages  enable row level security;
 
 -- Anyone can read published news
@@ -68,6 +83,10 @@ create policy "Public read published news"
 -- Anyone can read projects
 create policy "Public read projects"
   on projects for select using (true);
+
+-- Anyone can read published services
+create policy "Public read published services"
+  on services for select using (published = true);
 
 -- Anyone can read published resources
 create policy "Public read published resources"
@@ -83,6 +102,7 @@ create policy "Public insert messages"
 create policy "Anon full access news"      on news      for all using (true) with check (true);
 create policy "Anon full access projects"  on projects  for all using (true) with check (true);
 create policy "Anon full access resources" on resources for all using (true) with check (true);
+create policy "Anon full access services"  on services  for all using (true) with check (true);
 create policy "Anon read messages"         on messages  for select using (true);
 create policy "Anon update messages"       on messages  for update using (true) with check (true);
 create policy "Anon delete messages"       on messages  for delete using (true);
@@ -114,3 +134,11 @@ insert into resources (title_en, title_am, type_en, type_am, category, size, pub
 ('Peace Value Training Curriculum','ስርዓተ ትምህርት','Curriculum','ስርዓተ ትምህርት','training','3.5 MB',false),
 ('Early Warning System Guidelines','ቀድሞ ማስጠንቀቂያ መመሪያ','Guidelines','መመሪያዎች','guidelines','2.9 MB',true),
 ('Conflict Resolution Framework','የግጭት አፈታት ማዕቀፍ','Framework','ማዕቀፍ','policy','2.1 MB',true);
+
+insert into services (title_en, title_am, description_en, description_am, color, published, "order") values
+('Peace Value Training','የሰላም እሴት ግንባታ ስልጠና','Comprehensive training programs on peace values, conflict resolution, and community building.','በሰላም እሴቶች፣ ግጭት አፈታትና ማህበረሰብ ግንባታ ላይ አጠቃላይ የስልጠና ፕሮግራሞች።','green',true,1),
+('National Volunteer Service Coordination','የብሄራዊ በጎ-ፍቃድ አገልግሎት ማስተባበር','Coordination and management of national volunteer services for peace and development.','ለሰላምና ልማት የብሄራዊ በጎ ፈቃደኛ አገልግሎቶችን ማስተባበርና ማስተዳደር።','blue',true,2),
+('Peace & Diversity Promotion','የሰላም እሴቶችና ብዝሀነት ማስረጽ','Promoting peace values and celebrating diversity within our communities.','በማህበረሰባችን ውስጥ የሰላም እሴቶችን ማስፋፋትና ብዝሃነትን ማክበር።','yellow',true,3),
+('Religious Institution Registration','የሃይማኖት ተቋማት መመዝገብና ህጋዊነት','Legal registration and verification of religious institutions and organizations.','የሃይማኖት ተቋማትና ድርጅቶች ህጋዊ መመዝገብና ማረጋገጥ።','green',true,4),
+('Community Security Implementation','የማህበረሰብ ጸጥታ አጠባበቅ','Community-based security programs and neighborhood watch initiatives.','በማህበረሰብ ላይ የተመሰረቱ የደህንነት ፕሮግራሞችና የጎረቤት ክትትል ተነሳሽነቶች።','blue',true,5),
+('Community Dialogue Facilitation','የማህበረሰብ ምክክር ማስተባበር','Organizing and facilitating community dialogues for conflict prevention.','ለግጭት መከላከል የማህበረሰብ ውይይቶችን ማደራጀትና ማመቻቸት።','yellow',true,6);

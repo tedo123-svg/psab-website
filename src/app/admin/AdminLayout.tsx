@@ -2,13 +2,14 @@ import { NavLink, Outlet, useNavigate } from 'react-router';
 import { useAdmin } from '../contexts/AdminContext';
 import {
   LayoutDashboard, Newspaper, FolderKanban, BookOpen,
-  MessageSquare, LogOut, Shield, Menu, X, Bell
+  MessageSquare, LogOut, Shield, Menu, Bell, Wrench
 } from 'lucide-react';
 import { useState } from 'react';
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/news', label: 'News', icon: Newspaper, end: false },
+  { to: '/admin/services', label: 'Services', icon: Wrench, end: false },
   { to: '/admin/projects', label: 'Projects', icon: FolderKanban, end: false },
   { to: '/admin/resources', label: 'Resources', icon: BookOpen, end: false },
   { to: '/admin/messages', label: 'Messages', icon: MessageSquare, end: false },

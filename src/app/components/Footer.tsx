@@ -25,7 +25,7 @@ export function Footer() {
               </div>
               <div>
                 <h3 className="font-bold text-white text-sm">
-                  {language === 'en' ? 'PSAB' : 'የሰላምና ደህንነት'}
+                  {language === 'en' ? 'Lemi Kura PSO' : 'ለሚ ኩራ ሰ/ደ ጽ/ቤት'}
                 </h3>
               </div>
             </div>

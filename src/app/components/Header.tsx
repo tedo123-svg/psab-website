@@ -53,14 +53,14 @@ export function Header() {
             <div>
               <h1 className="font-bold text-lg md:text-xl text-gray-800 leading-tight">
                 {language === 'en' 
-                  ? 'Peace and Security Administration Bureau'
-                  : 'የሰላምና ደህንነት አስተዳደር ቢሮ'
+                  ? 'Lemi Kura Peace and Security Office'
+                  : 'ለሚ ኩራ ሰላምና ደህንነት ጽ/ቤት'
                 }
               </h1>
               <p className="text-sm text-gray-600">
                 {language === 'en'
-                  ? 'Public Organization Sector - Addis Ababa'
-                  : 'የህዝብ ድርጅት ሴክተር - አዲስ አበባ'
+                  ? 'Lemi Kura Sub-City - Addis Ababa'
+                  : 'ለሚ ኩራ ክፍለ ከተማ - አዲስ አበባ'
                 }
               </p>
             </div>

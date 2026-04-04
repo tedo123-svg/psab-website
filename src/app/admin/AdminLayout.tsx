@@ -33,8 +33,8 @@ export function AdminLayout() {
             <Shield className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-bold text-sm leading-tight">PSAB Admin</p>
-            <p className="text-xs text-gray-400">Management Portal</p>
+            <p className="font-bold text-sm leading-tight">Lemi Kura PSO</p>
+            <p className="text-xs text-gray-400">Admin Portal</p>
           </div>
         </div>
       </div>

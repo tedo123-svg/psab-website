@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAdmin } from '../contexts/AdminContext';
 import { ArrowRight, BookOpen, Award, ImageOff, Shield, Scale, Users, Heart } from 'lucide-react';
+import heroBg from '../components/hero.jpg';
 
 export function Home() {
   const { language, t } = useLanguage();
@@ -15,11 +16,12 @@ export function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-blue-700 to-yellow-600 text-white py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
+      <section
+        className="relative text-white py-20 md:py-32 overflow-hidden"
+        style={{ backgroundImage: `url(${heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+      >
+        {/* Dark overlay so text stays readable */}
+        <div className="absolute inset-0 bg-black/55" />
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">

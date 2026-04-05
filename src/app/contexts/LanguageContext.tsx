@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+﻿import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 type Language = 'en' | 'am';
 
@@ -147,13 +147,13 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.contact': 'አድራሻ',
     
     // Home Page (Amharic)
-    'home.hero.title': 'ዘላቂ ሰላምና ደህንነት መገንባት',
+    'home.hero.title': 'ዘላቂ ሰላምና ጸጥታ መገንባት',
     'home.hero.subtitle': 'በማህበረሰብ ተሳትፎና በብሄራዊ አንድነት',
-    'home.hero.description': 'ለአዲስ አበባ ከተማ አስተዳደር ሰላም፣ ደህንነትና የህግ የበላይነትን ማስፈን',
+    'home.hero.description': 'ለአዲስ አበባ ከተማ አስተዳደር ሰላም፣ ጸጥታና የህግ የበላይነትን ማስፈን',
     'home.hero.cta1': 'አገልግሎቶቻችን',
     'home.hero.cta2': 'አግኙን',
     'home.welcome.title': 'ወደ ለሚ ኩራ ክፍለ ከተማ ሰላምና ጸጥታ አስተዳደር ጽ/ቤት እንኳን በደህና መጡ',
-    'home.welcome.description': 'በአዲስ አበባ ሰላምን ለመጠበቅ፣ ማህበረሰባዊ ትስስርን ለማጠናከር እና ከደህንነት ጋር የተያያዙ የማህበረሰብ መዋቅሮችን ለማስተባበር ቁርጠኞች ነን። ተልእኮአችን በማህበረሰብ ተሳትፎና በብሄራዊ አንድነት ዘላቂ ሰላም ማስፋፋት ነው።',
+    'home.welcome.description': 'በአዲስ አበባ ሰላምን ለመጠበቅ፣ ማህበረሰባዊ ትስስርን ለማጠናከር እና ከጸጥታ ጋር የተያያዙ የማህበረሰብ መዋቅሮችን ለማስተባበር ቁርጠኞች ነን። ተልእኮአችን በማህበረሰብ ተሳትፎና በብሄራዊ አንድነት ዘላቂ ሰላም ማስፋፋት ነው።',
     'home.services.title': 'ዋና አገልግሎቶቻችን',
     'home.services.viewall': 'ሁሉንም አገልግሎቶች ይመልከቱ',
     'home.news.title': 'የቅርብ ጊዜ ዜናዎች እና ማሻሻያዎች',
@@ -165,9 +165,9 @@ const translations: Record<Language, Record<string, string>> = {
     'about.overview.title': 'አጠቃላይ እይታ',
     'about.overview.content': 'የለሚ ኩራ ክፍለ ከተማ ሰላምና ጸጥታ አስተዳደር ጽ/ቤት በለሚ ኩራ ክፍለ ከተማ አስተዳደር የሚመራ የመንግስት ተቋም ሲሆን በክፍለ ከተማው ውስጥ ሰላምን፣ ጸጥታንና የህግ የበላይነትን ለማስፈን የተቋቋመ ነው።',
     'about.mission.title': 'ተልእኮአችን',
-    'about.mission.content': 'በማህበረሰብ ተሳትፎ ዘላቂ ሰላምና ደህንነት መጠበቅ፣ ማህበረሰባዊ ትስስር ማጠናከር፣ ሃይማኖታዊ ተቋማትንና ማህበራዊ ድርጅቶችን ማስተባበር እና ለተዋቀረ አስተዳደር የተቋም አቅም መገንባት።',
+    'about.mission.content': 'በማህበረሰብ ተሳትፎ ዘላቂ ሰላምና ጸጥታ መጠበቅ፣ ማህበረሰባዊ ትስስር ማጠናከር፣ ሃይማኖታዊ ተቋማትንና ማህበራዊ ድርጅቶችን ማስተባበር እና ለተዋቀረ አስተዳደር የተቋም አቅም መገንባት።',
     'about.vision.title': 'ራእያችን',
-    'about.vision.content': 'ሁሉም ዜጎች ሰላምና ደህንነትን በንቃት የሚሳተፉበት፣ ብዝሃነት እንደ ጥንካሬ መገለጫ የሚከበርበት ሰላማዊ፣ ደህንነቱ የተጠበቀና የተዋሀደ አዲስ አበባ።',
+    'about.vision.content': 'ሁሉም ዜጎች ሰላምና ጸጥታን በንቃት የሚሳተፉበት፣ ብዝሃነት እንደ ጥንካሬ መገለጫ የሚከበርበት ሰላማዊ፣ ደህንነቱ የተጠበቀና የተዋሀደ አዲስ አበባ።',
     'about.values.title': 'ዋና እሴቶች',
     'about.values.transparency': 'ግልጽነት',
     'about.values.participation': 'የማህበረሰብ ተሳትፎ',
@@ -180,7 +180,7 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Services (Amharic)
     'services.title': 'አገልግሎቶቻችን',
-    'services.subtitle': 'ለማህበረሰቡ አጠቃላይ የሰላምና ደህንነት አገልግሎቶች',
+    'services.subtitle': 'ለማህበረሰቡ አጠቃላይ የሰላምና ጸጥታ አገልግሎቶች',
     'services.1.title': 'የሰላም እሴት ግንባታ ስልጠና',
     'services.1.description': 'በሰላም እሴቶች፣ ግጭት አፈታትና ማህበረሰብ ግንባታ ላይ አጠቃላይ የስልጠና ፕሮግራሞች',
     'services.2.title': 'የብሄራዊ በጎ-ፍቃድ አገልግሎት ማስተባበር',
@@ -196,13 +196,13 @@ const translations: Record<Language, Record<string, string>> = {
     'services.7.title': 'የማህበረሰብ ምክክር ማስተባበር',
     'services.7.description': 'ለግጭት መከላከል የማህበረሰብ ውይይቶችን ማደራጀትና ማመቻቸት',
     'services.8.title': 'የማህበረሰብ ጸጥታ አጠባበቅ',
-    'services.8.description': 'በማህበረሰብ ላይ የተመሰረቱ የደህንነት ፕሮግራሞችና የጎረቤት ክትትል ተነሳሽነቶች',
+    'services.8.description': 'በማህበረሰብ ላይ የተመሰረቱ የጸጥታ ፕሮግራሞችና የጎረቤት ክትትል ተነሳሽነቶች',
     'services.9.title': 'የግንዛቤ ስልጠና',
-    'services.9.description': 'በሰላም፣ ደህንነትና የዜግነት ኃላፊነቶች ላይ የሕዝብ ግንዛቤ መፍጠር',
+    'services.9.description': 'በሰላም፣ ጸጥታና የዜግነት ኃላፊነቶች ላይ የሕዝብ ግንዛቤ መፍጠር',
     'services.10.title': 'የህብረተሰብ ተሳትፎ ማጎልበት',
-    'services.10.description': 'በሰላምና ደህንነት ጉዳዮች ላይ የዜጎች ተሳትፎ የማጎልበት ፕሮግራሞች',
+    'services.10.description': 'በሰላምና ጸጥታ ጉዳዮች ላይ የዜጎች ተሳትፎ የማጎልበት ፕሮግራሞች',
     'services.11.title': 'የሰላም ሰራዊት አደረጃጀት',
-    'services.11.description': 'ለማህበረሰብ ደህንነት የሰላም ሰራዊት አደረጃጀትና ማሰማራት',
+    'services.11.description': 'ለማህበረሰብ ጸጥታ የሰላም ሰራዊት አደረጃጀትና ማሰማራት',
     'services.12.title': 'የሰላም ምክር ቤት መዋቅር',
     'services.12.description': 'የሰላም ምክር ቤት መዋቅሮችን መተግበርና ማስተባበር',
     'services.apply': 'አሁን ያመልክቱ',
@@ -214,7 +214,7 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Projects (Amharic)
     'projects.title': 'ፕሮጀክቶች እና ፕሮግራሞች',
-    'projects.subtitle': 'ለሰላምና ደህንነት በመካሄድ ላይ ያሉ ተነሳሽነቶቻችን',
+    'projects.subtitle': 'ለሰላምና ጸጥታ በመካሄድ ላይ ያሉ ተነሳሽነቶቻችን',
     'projects.status.ongoing': 'በመካሄድ ላይ',
     'projects.status.completed': 'የተጠናቀቀ',
     'projects.viewdetails': 'ዝርዝሮችን ይመልከቱ',
@@ -227,7 +227,7 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Community (Amharic)
     'community.title': 'የማህበረሰብ ተሳትፎ',
-    'community.subtitle': 'ሰላምና ደህንነት ለመገንባት እርስዎ ድምጽ አለዎት',
+    'community.subtitle': 'ሰላምና ጸጥታ ለመገንባት እርስዎ ድምጽ አለዎት',
     'community.feedback.title': 'አስተያየት ያቅርቡ',
     'community.feedback.name': 'ሙሉ ስም',
     'community.feedback.email': 'የኢሜይል አድራሻ',

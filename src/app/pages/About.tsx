@@ -1,4 +1,4 @@
-import { useLanguage } from '../contexts/LanguageContext';
+﻿import { useLanguage } from '../contexts/LanguageContext';
 import { Target, Eye, Award, Shield, Users, Heart, CheckCircle, Building2 } from 'lucide-react';
 
 export function About() {
@@ -26,11 +26,11 @@ export function About() {
     {
       name: {
         en: 'Peace Army & Security Organizations Directorate',
-        am: 'የሰላም ሰራዊትና የደህንነት ድርጅቶች ዳይሬክቶሬት',
+        am: 'የሰላም ሰራዊትና የጸጥታ ድርጅቶች ዳይሬክቶሬት',
       },
       description: {
         en: 'Manages peace army deployment and security coordination',
-        am: 'የሰላም ሰራዊት ማሰማራትና የደህንነት ማስተባበር ያስተዳድራል',
+        am: 'የሰላም ሰራዊት ማሰማራትና የጸጥታ ማስተባበር ያስተዳድራል',
       },
     },
     {
@@ -58,7 +58,7 @@ export function About() {
   const objectives = [
     {
       en: 'Promote peace, security, and rule of law',
-      am: 'ሰላም፣ ደህንነትና የህግ የበላይነትን ማስፋፋት',
+      am: 'ሰላም፣ ጸጥታና የህግ የበላይነትን ማስፋፋት',
     },
     {
       en: 'Strengthen community participation and ownership of peace',
@@ -78,7 +78,7 @@ export function About() {
     },
     {
       en: 'Support collaboration among stakeholders and security bodies',
-      am: 'በባለድርሻዎችና የደህንነት አካላት መካከል ትብብርን መደገፍ',
+      am: 'በባለድርሻዎችና የጸጥታ አካላት መካከል ትብብርን መደገፍ',
     },
   ];
 
@@ -93,7 +93,7 @@ export function About() {
           <p className="text-xl opacity-90 max-w-3xl mx-auto">
             {language === 'en'
               ? 'Dedicated to Building Sustainable Peace and Security for Addis Ababa'
-              : 'ለአዲስ አበባ ዘላቂ ሰላምና ደህንነት ለመገንባት ቁርጠኞች'
+              : 'ለአዲስ አበባ ዘላቂ ሰላምና ጸጥታ ለመገንባት ቁርጠኞች'
             }
           </p>
         </div>

@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+﻿import { Link } from 'react-router';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAdmin } from '../contexts/AdminContext';
 import { ArrowRight, BookOpen, Award, ImageOff, Shield, Scale, Users, Heart } from 'lucide-react';
@@ -74,7 +74,7 @@ export function Home() {
                 <Scale className="w-8 h-8 text-white" />
               </div>
               <h3 className="font-semibold text-gray-800">
-                {language === 'en' ? 'Security' : 'ደህንነት'}
+                {language === 'en' ? 'Security' : 'ጸጥታ'}
               </h3>
             </div>
             <div className="text-center p-6 rounded-lg bg-yellow-50 hover:bg-yellow-100 transition-colors">

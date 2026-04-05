@@ -29,7 +29,7 @@ export function Header() {
       <div className="bg-gradient-to-r from-green-700 to-blue-700">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center text-white text-sm">
           <div className="flex items-center gap-4">
-            <span>📞 +251-11-XXX-XXXX</span>
+            <span>📞 +251-11-222-5555</span>
             <span>✉️ info@psab.gov.et</span>
           </div>
           <button

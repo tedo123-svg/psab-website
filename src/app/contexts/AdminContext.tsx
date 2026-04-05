@@ -44,6 +44,14 @@ export interface Service {
   order: number;
 }
 
+export interface HeroSlide {
+  id: number;
+  imageUrl: string;
+  caption: { en: string; am: string };
+  order: number;
+  active: boolean;
+}
+
 export interface Message {
   id: number;
   source: 'contact' | 'community';
@@ -103,6 +111,15 @@ const mapService = (r: any): Service => ({
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapHeroSlide = (r: any): HeroSlide => ({
+  id: r.id,
+  imageUrl: r.image_url,
+  caption: { en: r.caption_en ?? '', am: r.caption_am ?? '' },
+  order: r.order ?? 0,
+  active: r.active ?? true,
+});
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapMessage = (r: any): Message => ({
   id: r.id,
   source: r.source,
@@ -141,6 +158,11 @@ interface AdminContextType {
   addService: (item: Omit<Service, 'id'>) => Promise<void>;
   updateService: (item: Service) => Promise<void>;
   deleteService: (id: number) => Promise<void>;
+  // Hero Slides
+  heroSlides: HeroSlide[];
+  addHeroSlide: (item: Omit<HeroSlide, 'id'>) => Promise<void>;
+  updateHeroSlide: (item: HeroSlide) => Promise<void>;
+  deleteHeroSlide: (id: number) => Promise<void>;
   // Messages
   messages: Message[];
   addMessage: (msg: Omit<Message, 'id' | 'date' | 'read'>) => Promise<void>;
@@ -161,27 +183,31 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [resources, setResources] = useState<Resource[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([]);
 
   // ── Load all data on mount ──
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const [n, p, r, s, m] = await Promise.all([
+      const [n, p, r, s, hs, m] = await Promise.all([
         supabase.from('news').select('*').order('created_at', { ascending: false }),
         supabase.from('projects').select('*').order('created_at', { ascending: true }),
         supabase.from('resources').select('*').order('created_at', { ascending: true }),
         supabase.from('services').select('*').order('"order"', { ascending: true }),
+        supabase.from('hero_slides').select('*').order('"order"', { ascending: true }),
         supabase.from('messages').select('*').order('created_at', { ascending: false }),
       ]);
       if (n.error) console.error('news:', n.error.message);
       if (p.error) console.error('projects:', p.error.message);
       if (r.error) console.error('resources:', r.error.message);
       if (s.error) console.error('services:', s.error.message);
+      if (hs.error) console.error('hero_slides:', hs.error.message);
       if (m.error) console.error('messages:', m.error.message);
       if (n.data) setNews(n.data.map(mapNews));
       if (p.data) setProjects(p.data.map(mapProject));
       if (r.data) setResources(r.data.map(mapResource));
       if (s.data) setServices(s.data.map(mapService));
+      if (hs.data) setHeroSlides(hs.data.map(mapHeroSlide));
       if (m.data) setMessages(m.data.map(mapMessage));
       setLoading(false);
     }
@@ -301,6 +327,28 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     if (!error) setServices((prev) => prev.filter((s) => s.id !== id));
   };
 
+  // ── Hero Slides CRUD ──
+  const addHeroSlide = async (item: Omit<HeroSlide, 'id'>) => {
+    const { data, error } = await supabase.from('hero_slides').insert({
+      image_url: item.imageUrl, caption_en: item.caption.en, caption_am: item.caption.am,
+      order: item.order, active: item.active,
+    }).select().single();
+    if (!error && data) setHeroSlides((prev) => [...prev, mapHeroSlide(data)].sort((a, b) => a.order - b.order));
+  };
+
+  const updateHeroSlide = async (item: HeroSlide) => {
+    const { error } = await supabase.from('hero_slides').update({
+      image_url: item.imageUrl, caption_en: item.caption.en, caption_am: item.caption.am,
+      order: item.order, active: item.active,
+    }).eq('id', item.id);
+    if (!error) setHeroSlides((prev) => prev.map((s) => (s.id === item.id ? item : s)));
+  };
+
+  const deleteHeroSlide = async (id: number) => {
+    const { error } = await supabase.from('hero_slides').delete().eq('id', id);
+    if (!error) setHeroSlides((prev) => prev.filter((s) => s.id !== id));
+  };
+
   // ── Messages ──
   const addMessage = async (msg: Omit<Message, 'id' | 'date' | 'read'>) => {
     const { data, error } = await supabase.from('messages').insert({
@@ -329,6 +377,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       projects, addProject, updateProject, deleteProject,
       resources, addResource, updateResource, deleteResource,
       services, addService, updateService, deleteService,
+      heroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
       messages, addMessage, markMessageRead, deleteMessage, unreadCount,
     }}>
       {children}

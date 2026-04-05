@@ -15,6 +15,7 @@ import { AdminLogin } from './admin/AdminLogin';
 import { AdminLayout } from './admin/AdminLayout';
 import { AdminGuard } from './admin/AdminGuard';
 import { AdminDashboard } from './admin/pages/AdminDashboard';
+import { AdminHeroSlides } from './admin/pages/AdminHeroSlides';
 import { AdminNews } from './admin/pages/AdminNews';
 import { AdminServices } from './admin/pages/AdminServices';
 import { AdminProjects } from './admin/pages/AdminProjects';
@@ -61,6 +62,7 @@ export const router = createBrowserRouter([
         Component: AdminLayout,
         children: [
           { index: true, Component: AdminDashboard },
+          { path: 'hero', Component: AdminHeroSlides },
           { path: 'news', Component: AdminNews },
           { path: 'services', Component: AdminServices },
           { path: 'projects', Component: AdminProjects },

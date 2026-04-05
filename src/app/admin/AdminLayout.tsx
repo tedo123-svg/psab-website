@@ -2,13 +2,14 @@ import { NavLink, Outlet, useNavigate } from 'react-router';
 import { useAdmin } from '../contexts/AdminContext';
 import {
   LayoutDashboard, Newspaper, FolderKanban, BookOpen,
-  MessageSquare, LogOut, Menu, Bell, Wrench
+  MessageSquare, LogOut, Menu, Bell, Wrench, Images
 } from 'lucide-react';
 import { useState } from 'react';
 import logo from '../components/logo.png';
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/admin/hero', label: 'Hero Slides', icon: Images, end: false },
   { to: '/admin/news', label: 'News', icon: Newspaper, end: false },
   { to: '/admin/services', label: 'Services', icon: Wrench, end: false },
   { to: '/admin/projects', label: 'Projects', icon: FolderKanban, end: false },

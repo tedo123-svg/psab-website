@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { useLanguage } from '../contexts/LanguageContext';
 import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, Youtube } from 'lucide-react';
+import logo from './logo.png';
 
 export function Footer() {
   const { language, t } = useLanguage();
@@ -20,9 +21,7 @@ export function Footer() {
           {/* About Section */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-600 via-blue-600 to-yellow-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-xl font-bold">ሰ</span>
-              </div>
+              <img src={logo} alt="Logo" className="w-12 h-12 rounded-full object-cover" />
               <div>
                 <h3 className="font-bold text-white text-sm">
                   {language === 'en' ? 'Lemi Kura PSAO' : 'ለሚ ኩራ ሰ/ጸ/አ ጽ/ቤት'}

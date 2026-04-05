@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Menu, X, Globe } from 'lucide-react';
 import { useState } from 'react';
+import logo from './logo.png';
 
 export function Header() {
   const { language, setLanguage, t } = useLanguage();
@@ -47,9 +48,7 @@ export function Header() {
         <div className="flex items-center justify-between">
           {/* Logo and Title */}
           <Link to="/" className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-green-600 via-blue-600 to-yellow-500 rounded-full flex items-center justify-center shadow-lg">
-              <span className="text-white text-2xl font-bold">ሰ</span>
-            </div>
+            <img src={logo} alt="Lemi Kura PSAO Logo" className="w-16 h-16 rounded-full object-cover shadow-lg" />
             <div>
               <h1 className="font-bold text-lg md:text-xl text-gray-800 leading-tight">
                 {language === 'en' 

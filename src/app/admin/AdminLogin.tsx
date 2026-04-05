@@ -1,7 +1,8 @@
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router';
 import { useAdmin } from '../contexts/AdminContext';
-import { Shield, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
+import logo from '../components/logo.png';
 
 export function AdminLogin() {
   const { login } = useAdmin();
@@ -27,8 +28,8 @@ export function AdminLogin() {
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-green-700 to-blue-700 p-8 text-white text-center">
-          <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Shield className="w-10 h-10" />
+          <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-2 border-white/30">
+            <img src={logo} alt="Logo" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-2xl font-bold">Admin Portal</h1>
           <p className="text-sm opacity-80 mt-1">Lemi Kura Subcity Peace and Security Administration Office</p>

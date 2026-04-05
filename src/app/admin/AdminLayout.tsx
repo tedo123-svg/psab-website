@@ -2,9 +2,10 @@ import { NavLink, Outlet, useNavigate } from 'react-router';
 import { useAdmin } from '../contexts/AdminContext';
 import {
   LayoutDashboard, Newspaper, FolderKanban, BookOpen,
-  MessageSquare, LogOut, Shield, Menu, Bell, Wrench
+  MessageSquare, LogOut, Menu, Bell, Wrench
 } from 'lucide-react';
 import { useState } from 'react';
+import logo from '../components/logo.png';
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -30,9 +31,7 @@ export function AdminLayout() {
       {/* Logo */}
       <div className="p-6 border-b border-gray-700">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
-            <Shield className="w-5 h-5 text-white" />
-          </div>
+          <img src={logo} alt="Logo" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
           <div>
             <p className="font-bold text-sm leading-tight">Lemi Kura PSAO</p>
             <p className="text-xs text-gray-400">Admin Portal</p>

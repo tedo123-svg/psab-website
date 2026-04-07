@@ -38,12 +38,11 @@ export function Projects() {
       {/* Statistics */}
       <section className="py-12 bg-white border-b">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
-              { value: '12+', label: { en: 'Active Projects', am: 'ንቁ ፕሮጀክቶች' }, color: 'text-green-600' },
-              { value: '5,000+', label: { en: 'Participants', am: 'ተሳታፊዎች' }, color: 'text-blue-600' },
-              { value: '8', label: { en: 'Sub-Cities Covered', am: 'የሚሸፈኑ ክፍለ ከተሞች' }, color: 'text-yellow-600' },
-              { value: '95%', label: { en: 'Success Rate', am: 'የስኬት መጠን' }, color: 'text-green-600' },
+              { value: projects.length, label: { en: 'Total Projects', am: 'ጠቅላላ ፕሮጀክቶች' }, color: 'text-green-600' },
+              { value: projects.filter((p) => p.status === 'ongoing').length, label: { en: 'Ongoing', am: 'በመካሄድ ላይ' }, color: 'text-blue-600' },
+              { value: projects.filter((p) => p.status === 'completed').length, label: { en: 'Completed', am: 'የተጠናቀቁ' }, color: 'text-yellow-600' },
             ].map((stat, i) => (
               <div key={i} className="text-center">
                 <div className={`text-4xl font-bold ${stat.color} mb-2`}>{stat.value}</div>
